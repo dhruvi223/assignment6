@@ -3,31 +3,44 @@ import { useState } from "react";
 
 function ProductList() {
   const product = JSON.parse(localStorage.getItem("products"));
-  const [itemCounts, setItemCounts] = useState({});
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
   const email = loggedInUser.email;
 
   const addToCart = (product) => {
-    const newItemCounts = { ...itemCounts };
-    const count = newItemCounts[product.id] || 0;
+    const count = JSON.parse(localStorage.getItem("CartProductQuntity"));
+    let isProductInCart = count.some(item => item[product.id]);         
+    console.log(count);
 
-    if (count == 0){
+    if (isProductInCart) {
+      count.forEach(item => {
+          if (item[product.id]) {
+              item[product.id] += 1;
+          }
+      });
+  } else {
+      count.push({ [product.id]: 1 });
+      count.forEach(item => {
+        if (item[product.id]) {
+            item[product.id] += 1;
+        }
+    });
+
+  }
+  localStorage.setItem("CartProductQuntity", JSON.stringify(count));
+    if (!isProductInCart){
     const carts = JSON.parse(localStorage.getItem('ProductCart'));
     carts.push(product);
     localStorage.setItem('ProductCart', JSON.stringify(carts));
     }
-
-    newItemCounts[product.id] = (newItemCounts[product.id] || 0) + 1;
-    setItemCounts(newItemCounts);
     
 
   }
-// console.log("helo");
-  // console.log(itemCounts);
-  localStorage.setItem("CartProductQuntity", JSON.stringify(itemCounts));
 
-  return (
+  // const c = [];
+  // localStorage.setItem("CartProductQuntity", JSON.stringify(c));
+
+  return (  
     <div className="p-6 m- grid grid-cols-4">
       {product.map((item) => (
         <div className="card w-96 bg-base-100 shadow-xl p-3 m-3 border rounded-md z" key = {item.key}>

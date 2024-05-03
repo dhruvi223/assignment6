@@ -33,20 +33,6 @@ function SignIn() {
 
     console.log('submit');
     auth.login(data.email, data.password, setEmail, setPassword, navigate);
-    // await dispatch(
-    //   signup(
-    //     data.email,
-    //     data.password,
-    //     data.firstName,
-    //     data.lastName,
-    //     data.cpassword,
-    //     setFirstName,
-    //     setLastName,
-    //     setEmail,
-    //     setPassword,
-    //     navigate
-    //   )
-    // );
   };
 
   return (
@@ -60,47 +46,6 @@ function SignIn() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-            {/* <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                First name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="fname"
-                  name="fname"
-                  type="text"
-                  autoComplete="first name"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
-                  {...register("firstName", { required: true, maxLength: 10 })}
-              />
-              {errors.firstName && <p className="block text-xs text-red-700 text-left">{name.firstname}</p>}
-              </div>
-            </div> */}
-
-            {/* <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
-              >
-                Last name
-              </label>
-              <div className="mt-2">
-                <input
-                  id="lname"
-                  name="lname"
-                  type="text"
-                  autoComplete="email"
-                  required
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset sm:text-sm sm:leading-6"
-                  {...register("lastName", { required: true, maxLength: 10 })}
-                />
-                {errors.lastName && <p className="block text-xs text-red-700 text-left">{name.lastname}</p>}
-              </div>
-            </div> */}
             
             <div>
               <label

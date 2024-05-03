@@ -5,56 +5,65 @@ function Cart() {
     const productCart = [];
     const [quantities, setQuantities] = useState({});
 
+    function findIndexByKey(array, key) {
+      for (let i = 0; i < array.length; i++) {
+          if (key in array[i]) {
+              return i;
+          }
+      }
+      return -1; 
+  }
+
     const increment = (itemId) => {
-      setQuantities(prevQuantities => ({
-        ...prevQuantities,
-        [itemId]: (prevQuantities[itemId] || 0) + 1
-      }));
+      const count = JSON.parse(localStorage.getItem("CartProductQuntity"));
+        count.forEach(item => {
+            if (item[itemId]) {
+                item[itemId] += 1;
+            }
+        });
+    localStorage.setItem("CartProductQuntity", JSON.stringify(count));
     };
   
     const decrement = (itemId) => {
-      if (quantities[itemId] && quantities[itemId] > 0) {
-        setQuantities(prevQuantities => ({
-          ...prevQuantities,
-          [itemId]: prevQuantities[itemId] - 1
-        }));
-      }
+      const count = JSON.parse(localStorage.getItem("CartProductQuntity"));
+      const index = count.findIndex(item => item[itemId]);
+
+      const i = findIndexByKey(count, itemId);
+      const v = i !== -1 ? Object.values(count[i])[0] : undefined;
+        count.forEach(item => {
+            if (item[itemId]) {
+                item[itemId] -= 1;
+            }
+        });
+
+        if (v == 0){
+          const productCart = JSON.parse(localStorage.getItem('ProductCart')) || [];
+            const updatedProductCart = productCart.filter(product => product.id !== itemId);
+            localStorage.setItem('ProductCart', JSON.stringify(updatedProductCart));
+        }
+    localStorage.setItem("CartProductQuntity", JSON.stringify(count));
     };
    
   
 
-    const q = localStorage.getItem("CartProductQuntity");
-    console.log(q);
-    console.log(q["p1"]);
-    console.log(quantities);
+    const q = JSON.parse(localStorage.getItem("CartProductQuntity"));
+
+  const iP1 = findIndexByKey(q, 'p1');
+  const iP2 = findIndexByKey(q, 'p2');
+
+  const vP1 = iP1 !== -1 ? Object.values(q[iP1])[0] : undefined;
+  const vP2 = iP2 !== -1 ? Object.values(q[iP2])[0] : undefined;
 
 
     // localStorage.setItem("ProductCart", JSON.stringify(productCart))
 
-    // const p = {
-    //     id: 'p1',
-    //     price:126,
-    //     title: 'Man Perfume',
-    //     description: 'Denver - Hamilton',
-    //   }
-    
-    // localStorage.setItem("ProductCart", JSON.stringify(p));
-
-    // const carts = JSON.parse(localStorage.getItem('ProductCart'))
-    // console.log(carts);
-    // carts.push(p)
-    // localStorage.setItem('ProductCart', JSON.stringify(carts));
-
-    const removeItem = () => {
-
-    }
+  
     const user = JSON.parse(localStorage.getItem("loggedInUser"));
     const email = user.email;
 
     const productP = JSON.parse(localStorage.getItem("ProductCart"));
-    // console.log(productP);
     const product = productP.filter(product => product.email === email);
-    // console.log(product);
+
 
 
   return (
@@ -65,13 +74,11 @@ function Cart() {
           <div>
             <div className='flex flex-row'>
             <h2 className="my-3 text-xl">{item.title}</h2>
-            <h2 className="my-3 ml-28 text-xl">${(item.price)*(q[item.id])}</h2>
+            <h2 className="my-3 ml-28 text-xl">${item.id === 'p1' ? (item.price)*(vP1) : item.id === 'p2' ? (item.price)*(vP2) : ''}</h2>
             <h2 className="my-5 ml-2 text-sm italic">(${item.price}/item)</h2>
             </div>
-            {/* <h2 className="my-3">{item.description}</h2> */}
-
             <div className="flex flex-row">
-              <h2>{q[item.id]}</h2>
+            <h2>{item.id === 'p1' ? vP1 : item.id === 'p2' ? vP2 : ''}</h2>
               <button className="shadow-md border-white p-2 ml-60" onClick = {() => decrement(item.id)}>-</button>
               <button className="shadow-md border-white rounded-xs  p-2 ml-4" onClick = {() => increment(item.id)}>+</button>
             </div>
